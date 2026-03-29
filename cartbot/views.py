@@ -31,10 +31,7 @@ class RemoveSelect(discord.ui.Select):
     def __init__(self, items: list[Item], page: int, shopping_list: ShoppingList) -> None:
         self._page = page
         self._shopping_list = shopping_list
-        options = [
-            discord.SelectOption(label=item.name, value=str(item.id), emoji="✅")
-            for item in items
-        ]
+        options = [discord.SelectOption(label=item.name, value=str(item.id), emoji="✅") for item in items]
         super().__init__(placeholder="Mark as purchased (removes from list)...", options=options, row=0)
 
     async def callback(self, interaction: discord.Interaction) -> None:

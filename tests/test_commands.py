@@ -26,6 +26,7 @@ def capture_commands(sl: ShoppingList) -> dict:
         def decorator(f):
             handlers[kwargs["name"]] = f
             return f
+
         return decorator
 
     tree = MagicMock()

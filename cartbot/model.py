@@ -12,8 +12,7 @@ class ShoppingList:
     def __init__(self, db_path: str = "cartbot.db") -> None:
         self._conn = sqlite3.connect(db_path)
         self._conn.execute(
-            "CREATE TABLE IF NOT EXISTS items "
-            "(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT NOT NULL)"
+            "CREATE TABLE IF NOT EXISTS items (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT NOT NULL)"
         )
         self._conn.commit()
 
