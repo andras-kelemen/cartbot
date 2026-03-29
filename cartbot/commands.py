@@ -25,7 +25,7 @@ def register(tree: app_commands.CommandTree, shopping_list: ShoppingList) -> Non
     async def help_command(interaction: discord.Interaction) -> None:
         await interaction.response.send_message(
             "**cartbot commands:**\n"
-            "`/add <item>` – Add an item to the shopping list\n"
-            "`/list` – Show all items; select one to mark it as purchased and remove it\n"
-            "`/help` – Show this help message"
+            "`/add <item>` - Add an item to the shopping list\n"
+            "`/list` - Show all items; select one to mark it as purchased and remove it\n"
+            "`/help` - Show this help message"
         )
