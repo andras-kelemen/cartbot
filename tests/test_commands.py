@@ -6,8 +6,10 @@ from cartbot.model import ShoppingList
 
 
 @pytest.fixture()
-def sl() -> ShoppingList:
-    return ShoppingList(db_path=":memory:")
+def sl():
+    shopping_list = ShoppingList(db_path=":memory:")
+    yield shopping_list
+    shopping_list.close()
 
 
 def make_interaction() -> MagicMock:
