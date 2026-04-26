@@ -95,6 +95,21 @@ def test_toggle_checked_checked_to_unchecked(sl: ShoppingList) -> None:
     assert sl.get_all()[0].checked is False
 
 
+def test_get_emoji_for_name_returns_none_when_never_looked_up(sl: ShoppingList) -> None:
+    sl.add("milk")
+    assert sl.get_emoji_for_name("milk") is None
+
+
+def test_get_emoji_for_name_returns_emoji_when_stored(sl: ShoppingList) -> None:
+    sl.add("pizza", emoji="🍕")
+    assert sl.get_emoji_for_name("pizza") == "🍕"
+
+
+def test_get_emoji_for_name_returns_sentinel_when_not_found(sl: ShoppingList) -> None:
+    sl.add("kifli", emoji="")
+    assert sl.get_emoji_for_name("kifli") == ""
+
+
 def test_migration_existing_db() -> None:
     with tempfile.NamedTemporaryFile(suffix=".db", delete=False) as f:
         db_path = f.name

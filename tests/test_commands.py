@@ -1,8 +1,15 @@
-from unittest.mock import AsyncMock, MagicMock
+from unittest.mock import AsyncMock, MagicMock, patch
 
 import pytest
 
+from cartbot.commands import _resolve_emoji
 from cartbot.model import ShoppingList
+
+
+@pytest.fixture(autouse=True)
+def mock_emoji_lookup():
+    with patch("cartbot.commands.lookup_emoji", return_value=None):
+        yield
 
 
 @pytest.fixture()
@@ -15,7 +22,9 @@ def sl():
 def make_interaction() -> MagicMock:
     interaction = MagicMock()
     interaction.response.send_message = AsyncMock()
+    interaction.response.defer = AsyncMock()
     interaction.response.edit_message = AsyncMock()
+    interaction.followup.send = AsyncMock()
     return interaction
 
 
@@ -37,6 +46,12 @@ def capture_commands(sl: ShoppingList) -> dict:
     return handlers
 
 
+async def test_resolve_emoji_returns_cached_without_lookup(sl: ShoppingList) -> None:
+    sl.add("pizza", emoji="🍕")
+    result = await _resolve_emoji("pizza", sl)
+    assert result == "🍕"
+
+
 async def test_add_sends_confirmation(sl: ShoppingList) -> None:
     handlers = capture_commands(sl)
     await handlers["add"](make_interaction(), item="tomato")
@@ -47,7 +62,7 @@ async def test_add_replies_with_item_name(sl: ShoppingList) -> None:
     handlers = capture_commands(sl)
     interaction = make_interaction()
     await handlers["add"](interaction, item="tomato")
-    assert "tomato" in interaction.response.send_message.call_args.args[0]
+    assert "tomato" in interaction.followup.send.call_args.args[0]
 
 
 async def test_add_comma_separated_adds_all(sl: ShoppingList) -> None:
@@ -60,7 +75,7 @@ async def test_add_comma_separated_replies_with_all_names(sl: ShoppingList) -> N
     handlers = capture_commands(sl)
     interaction = make_interaction()
     await handlers["add"](interaction, item="milk, bread")
-    msg = interaction.response.send_message.call_args.args[0]
+    msg = interaction.followup.send.call_args.args[0]
     assert "milk" in msg
     assert "bread" in msg
 

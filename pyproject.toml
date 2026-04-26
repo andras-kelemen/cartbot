@@ -1,11 +1,13 @@
 [project]
 name = "cartbot"
-version = "0.9.0"
+version = "1.0.0"
 description = "Discord bot for managing shared shopping lists"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
+    "deep-translator>=1.11.4",
     "discord-py>=2.4",
+    "emoji>=2.15.0",
 ]
 
 [dependency-groups]
@@ -39,3 +41,6 @@ known-first-party = ["cartbot"]
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 asyncio_mode = "auto"
+
+[tool.coverage.report]
+omit = ["cartbot/__main__.py"]
