@@ -1,3 +1,5 @@
+import math
+
 import discord
 
 from cartbot.model import Item, ShoppingList
@@ -22,7 +24,7 @@ def build_embed(items: list[Item], page: int, total_pages: int) -> discord.Embed
 
 def build_list_message(shopping_list: ShoppingList, page: int) -> tuple[discord.Embed, "ShoppingListView"]:
     all_items = shopping_list.get_all()
-    total_pages = max(1, -(-len(all_items) // PAGE_SIZE))
+    total_pages = max(1, math.ceil(len(all_items) / PAGE_SIZE))
     page = min(page, total_pages - 1)
     page_items = all_items[page * PAGE_SIZE : (page + 1) * PAGE_SIZE]
     return build_embed(page_items, page, total_pages), ShoppingListView(page_items, page, total_pages, shopping_list)
@@ -31,7 +33,7 @@ def build_list_message(shopping_list: ShoppingList, page: int) -> tuple[discord.
 class ItemButton(discord.ui.Button):
     def __init__(self, item: Item, page: int, shopping_list: ShoppingList, row: int) -> None:
         style = discord.ButtonStyle.success if item.checked else discord.ButtonStyle.secondary
-        emoji = "✅" if item.checked else "🛒"
+        emoji = "✅" if item.checked else (item.emoji or "🛒")
         super().__init__(label=item.name, style=style, emoji=emoji, row=row)
         self._item = item
         self._page = page
