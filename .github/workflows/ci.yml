@@ -37,7 +37,6 @@ jobs:
           token: ${{ secrets.CODECOV_TOKEN }}
           files: coverage.xml
           fail_ci_if_error: false
-        run: uv run pytest
 
   docker:
     runs-on: ubuntu-latest
