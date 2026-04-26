@@ -1,18 +1,22 @@
 # cartbot
 
+[![CI](https://github.com/andras-kelemen/cartbot/actions/workflows/ci.yml/badge.svg)](https://github.com/andras-kelemen/cartbot/actions/workflows/ci.yml)
+[![codecov](https://codecov.io/gh/andras-kelemen/cartbot/branch/main/graph/badge.svg)](https://codecov.io/gh/andras-kelemen/cartbot)
+![Python](https://img.shields.io/badge/python-3.12+-blue)
+
 Discord bot for managing shared shopping lists.
 
 ## Commands
 
 | Command | Description |
 |---|---|
-| `/add <item>` | Add an item to the shopping list |
-| `/list` | Show all items; select one to mark it as purchased and remove it |
+| `/add <item(s)>` | Add one or more comma-separated items (e.g. `/add milk, bread, eggs`) |
+| `/list` | Show all items as toggle buttons; tap to check off, next `/list` removes them |
 | `/help` | Show available commands |
 
 ## How it works
 
-`/list` displays an embed with all items and a dropdown menu. Selecting an item marks it as purchased and removes it from the list. When the list is empty, the embed turns green. Lists with more than 25 items are paginated.
+`/list` displays an embed with each item as a clickable button. Tapping a button marks it as done (turns green). The next time `/list` is called, checked items are removed and a fresh list is shown. When the list is empty, the embed turns green. Lists with more than 20 items are paginated.
 
 ## Setup
 
@@ -33,6 +37,7 @@ Discord bot for managing shared shopping lists.
 |---|---|---|
 | `DISCORD_TOKEN` | Discord bot token | required |
 | `DB_PATH` | Path to the SQLite database file | `cartbot.db` |
+| `GUILD_ID` | Sync slash commands to a specific server instantly (dev only) | — |
 
 Create a `.env` file:
 
@@ -70,7 +75,7 @@ make format    # ruff format
 ```
 cartbot/
   model.py     — data layer (ShoppingList, Item)
-  views.py     — Discord UI (embed, select menu, pagination)
+  views.py     — Discord UI (embed, buttons, pagination)
   commands.py  — slash command handlers
   bot.py       — bot setup and wiring
   __main__.py  — entry point
